@@ -1,7 +1,7 @@
 use gtk::gdk::Display;
 use gtk::{prelude::*, CssProvider, style_context_add_provider_for_display};
 use gtk::{Application, ApplicationWindow};
-use gtk::{Box, Button, FlowBox, FlowBoxChild, Label, Orientation, ScrolledWindow};
+use gtk::{Box, Button, FlowBox, Label, Orientation, ScrolledWindow};
 use gtk::{ListBox, ListBoxRow, HeaderBar};
 
 fn build_ui(application: &Application) {
@@ -14,8 +14,6 @@ fn build_ui(application: &Application) {
 
     // Header Bar
     let header_bar = HeaderBar::new();
-    // header_bar.set_show_close_button(false);
-
     let title_label = Label::new(Some("Rusty Nail POS"));
     header_bar.set_title_widget(Some(&title_label));
     header_bar.add_css_class("header-bar");
@@ -101,7 +99,7 @@ fn main() {
 
     application.connect_startup(|_| load_css());
 
-    application.connect_startup(|app| {
+    application.connect_activate(|app| {
         build_ui(app);
     });
 
