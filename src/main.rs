@@ -1,8 +1,8 @@
 use gtk::gdk::Display;
-use gtk::{prelude::*, CssProvider, style_context_add_provider_for_display};
+use gtk::{prelude::*, style_context_add_provider_for_display, CssProvider};
 use gtk::{Application, ApplicationWindow};
 use gtk::{Box, Button, FlowBox, Label, Orientation, ScrolledWindow};
-use gtk::{ListBox, ListBoxRow, HeaderBar};
+use gtk::{HeaderBar, ListBox, ListBoxRow};
 
 fn build_ui(application: &Application) {
     let window = ApplicationWindow::new(application);
@@ -83,11 +83,11 @@ fn build_ui(application: &Application) {
 }
 
 fn load_css() {
-    let provider = CssProvider::new();  
+    let provider = CssProvider::new();
     provider.load_from_data(include_str!("style.css"));
     style_context_add_provider_for_display(
-        &Display::default().expect("Could not connect to display"), 
-        &provider, 
+        &Display::default().expect("Could not connect to display"),
+        &provider,
         gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
     );
 }
