@@ -15,6 +15,8 @@ pub fn build_category_grid() -> ScrolledWindow {
         let button_label = format!("Category {}", i);
         let button = Button::with_label(&button_label);
         flowbox.append(&button);
+        button.add_css_class(&format!("cat-btn-{}", i));
+        button.add_css_class("btn");
     }
     scroll_window.set_child(Some(&flowbox));
 

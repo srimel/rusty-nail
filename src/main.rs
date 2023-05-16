@@ -10,6 +10,7 @@ fn build_ui(application: &Application) {
     let window = ApplicationWindow::new(application);
     window.set_default_size(800, 600);
     window.set_title(Some("Rusty Nail POS"));
+    window.add_css_class("main-window");
 
     let content_box = Box::new(Orientation::Vertical, 0);
     content_box.append(&ui::build_header_bar());

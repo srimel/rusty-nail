@@ -8,6 +8,7 @@ pub fn build_transaction_panel() -> Box {
     let transaction_box = Box::new(Orientation::Vertical, 0);
     transaction_box.append(&build_item_list());
     transaction_box.append(&build_amount_owed_box());
+    transaction_box.add_css_class("transaction-box");   
 
     transaction_box
 }
@@ -35,9 +36,12 @@ fn build_amount_owed_box() -> Box {
     let total_amount_label = Label::new(Some("Total Amount: $25.00"));
 
     total_amount_box.append(&total_amount_label);
+    total_amount_box.add_css_class("total-amount-box");
 
     let checkout_button = Button::with_label("Close Out");
     total_amount_box.append(&checkout_button);
+    checkout_button.add_css_class("btn");
+    checkout_button.add_css_class("checkout-btn");
 
     total_amount_box
 }

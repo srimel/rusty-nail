@@ -1,8 +1,74 @@
 .items-list {
     padding-top: 10px;
     margin-bottom: 20px;
+    border: 2px solid black;
+}
+    
+.transaction-box {
+    margin-right: 5px;
 }
 
 .header-bar {
     margin-bottom: 10px;
+}
+.cat-btn-1 {
+    background: red;
+}
+
+.cat-btn-2 {
+    background: blue;
+}
+
+.cat-btn-3 {
+    background: yellow;
+}
+
+.cat-btn-4 {
+    background: green;
+}
+
+.cat-btn-5 {
+    background: cyan;
+}
+
+.cat-btn-6 {
+    background: pink;
+}
+
+.cat-btn-7 {
+    background: magenta;
+}
+
+.cat-btn-8 {
+    background: mediumaquamarine;
+}
+
+.cat-btn-9 {
+    background: purple;
+}
+
+.cat-btn-10 {
+    background: blueviolet;
+}
+
+.main-window {
+    background: gray;
+}
+
+.btn {
+    /* Find best contrast color matching */
+    color: black;
+    font-weight: bold;
+    border-width: 2px;
+    border-color: black;
+}
+
+.checkout-btn {
+    margin-top: 20px;
+}
+
+.total-amount-box {
+    font-size: large;
+    font-weight: bold;
+    color: black;
 }
