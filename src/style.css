@@ -8,9 +8,17 @@
     margin-right: 5px;
 }
 
+.tab-owner-box {
+    margin-bottom: 5px;
+    background: white;
+    padding: 5px; 
+    border: 2px solid black;
+}
+
 .header-bar {
     margin-bottom: 10px;
 }
+
 .cat-btn-1 {
     background: red;
 }

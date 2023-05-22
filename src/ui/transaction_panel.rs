@@ -6,9 +6,10 @@ use gtk::{prelude::*, Box, Button, Label, ListBox, ListBoxRow, Orientation};
 /// TODO: This will probably need another box containing the holder of the current bar tab.
 pub fn build_transaction_panel() -> Box {
     let transaction_box = Box::new(Orientation::Vertical, 0);
+    transaction_box.append(&build_tab_owner_box());
     transaction_box.append(&build_item_list());
     transaction_box.append(&build_amount_owed_box());
-    transaction_box.add_css_class("transaction-box");   
+    transaction_box.add_css_class("transaction-box");
 
     transaction_box
 }
@@ -44,4 +45,15 @@ fn build_amount_owed_box() -> Box {
     checkout_button.add_css_class("checkout-btn");
 
     total_amount_box
+}
+
+fn build_tab_owner_box() -> Box {
+    let tab_owner_box = Box::new(Orientation::Vertical, 0);
+    let patron_name_label = Label::new(Some("Patron Name:"));
+    let current_patron_label = Label::new(Some("John Doe"));
+    tab_owner_box.append(&patron_name_label);
+    tab_owner_box.append(&current_patron_label);
+    tab_owner_box.add_css_class("tab-owner-box");
+
+    tab_owner_box
 }
