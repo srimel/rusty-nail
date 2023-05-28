@@ -1,5 +1,9 @@
+mod data_processing;
 mod ui;
 
+use std::env;
+
+use data_processing::read_csv_file;
 use gtk::gdk::Display;
 use gtk::{
     prelude::*, style_context_add_provider_for_display, Application, ApplicationWindow, Box,
@@ -8,6 +12,7 @@ use gtk::{
 
 fn build_ui(application: &Application) {
     let window = ApplicationWindow::new(application);
+    window.set_cursor_from_name(Some("default"));
     window.set_default_size(800, 600);
     window.set_title(Some("Rusty Nail POS"));
     window.add_css_class("main-window");
@@ -44,7 +49,18 @@ fn main() {
     application.connect_startup(|_| load_css());
 
     application.connect_activate(|app| {
-        build_ui(app);
+        // build_ui(app);
+        let current_dir = env::current_dir().expect("Failed to get current directory");
+        println!("Current working directory: {:?}", current_dir);
+        match read_csv_file() {
+            Ok(data_map) => {
+                println!("{:?}", data_map);
+                build_ui(app);
+            }
+            Err(e) => {
+                println!("Error: {}", e);
+            }
+        }
     });
 
     application.run();
