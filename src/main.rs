@@ -1,5 +1,7 @@
 mod data_processing;
 mod ui;
+mod patron;
+mod patrons;
 
 use std::collections::HashMap;
 use std::env;

@@ -1,3 +1,6 @@
+use crate::patron::Patron;
+use crate::patrons::PATRONS;
+
 #[allow(deprecated)]
 use gtk::{
     prelude::*, ApplicationWindow, Box, Button, Dialog, Entry, HeaderBar, Label, Orientation,
@@ -62,11 +65,20 @@ fn create_new_tab(window: &ApplicationWindow) {
         if response == ResponseType::Accept {
             let patron_name = entry.text().to_string();
             println!("Patron name: {}", patron_name);
-            // create_tab_with_patron(&patron_name);
+            // TODO
+            create_tab_with_patron(&patron_name);
         }
         dialog.close();
     });
 
     // Show the dialog
     dialog.present();
+}
+
+fn create_tab_with_patron(patron_name: &str) {
+    let mut patrons = PATRONS.lock().unwrap();
+    patrons.push(Patron {
+        name: patron_name.to_string(),
+        tab: Vec::new(),
+    });
 }

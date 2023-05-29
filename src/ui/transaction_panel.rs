@@ -1,9 +1,8 @@
 use gtk::{prelude::*, Box, Button, Label, ListBox, ListBoxRow, Orientation};
+use crate::patrons::PATRONS;
 
 /// Builds the right panel of the application. This includes the list of items and the total
 /// amount owed with a checkout button.
-///
-/// TODO: This will probably need another box containing the holder of the current bar tab.
 pub fn build_transaction_panel() -> Box {
     let transaction_box = Box::new(Orientation::Vertical, 0);
     transaction_box.append(&build_tab_owner_box());
@@ -43,6 +42,12 @@ fn build_amount_owed_box() -> Box {
     total_amount_box.append(&checkout_button);
     checkout_button.add_css_class("btn");
     checkout_button.add_css_class("checkout-btn");
+
+    checkout_button.connect_clicked(move |_| {
+        println!("Checkout button clicked");
+        let patrons = PATRONS.lock().unwrap();
+        println!("Patrons: {:?}", *patrons);
+    });
 
     total_amount_box
 }
