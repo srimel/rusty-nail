@@ -1,6 +1,7 @@
 mod data_processing;
 mod ui;
 
+use std::collections::HashMap;
 use std::env;
 
 use data_processing::read_csv_file;
@@ -10,7 +11,7 @@ use gtk::{
     CssProvider, Orientation,
 };
 
-fn build_ui(application: &Application) {
+fn build_ui(application: &Application, data_map: HashMap<String, Vec<String>>) {
     let window = ApplicationWindow::new(application);
     window.set_cursor_from_name(Some("default"));
     window.set_default_size(800, 600);
@@ -18,11 +19,11 @@ fn build_ui(application: &Application) {
     window.add_css_class("main-window");
 
     let content_box = Box::new(Orientation::Vertical, 0);
-    content_box.append(&ui::build_header_bar());
+    content_box.append(&ui::build_header_bar(&window));
 
     let main_box = Box::new(Orientation::Horizontal, 0);
     main_box.set_size_request(-1, 500);
-    main_box.append(&ui::build_category_grid());
+    main_box.append(&ui::build_category_grid(data_map));
     main_box.append(&ui::build_transaction_panel());
 
     content_box.append(&main_box);
@@ -49,13 +50,12 @@ fn main() {
     application.connect_startup(|_| load_css());
 
     application.connect_activate(|app| {
-        // build_ui(app);
         let current_dir = env::current_dir().expect("Failed to get current directory");
         println!("Current working directory: {:?}", current_dir);
         match read_csv_file() {
             Ok(data_map) => {
                 println!("{:?}", data_map);
-                build_ui(app);
+                build_ui(app, data_map);
             }
             Err(e) => {
                 println!("Error: {}", e);

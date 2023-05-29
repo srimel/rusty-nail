@@ -19,44 +19,44 @@
     margin-bottom: 10px;
 }
 
-.cat-btn-1 {
-    background: red;
+.btn-red {
+    background: lightcoral;
 }
 
-.cat-btn-2 {
-    background: blue;
+.btn-blue {
+    background: lightblue;
 }
 
-.cat-btn-3 {
+.btn-yellow {
     background: yellow;
 }
 
-.cat-btn-4 {
-    background: green;
+.btn-green {
+    background: lightgreen;
 }
 
-.cat-btn-5 {
+.btn-cyan {
     background: cyan;
 }
 
-.cat-btn-6 {
+.btn-pink {
     background: pink;
 }
 
-.cat-btn-7 {
+.btn-magenta {
     background: magenta;
 }
 
-.cat-btn-8 {
+.btn-marine {
     background: mediumaquamarine;
 }
 
-.cat-btn-9 {
-    background: purple;
+.btn-purple {
+    background: plum;
 }
 
-.cat-btn-10 {
-    background: blueviolet;
+.btn-blueviolet {
+    background: lightyellow;
 }
 
 .main-window {
