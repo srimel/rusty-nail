@@ -1,5 +1,8 @@
 use crate::patron::Patron;
 use crate::patrons::PATRONS;
+use crate::current_patron::{set_current_patron, get_current_patron};
+use crate::ui::transaction_panel::get_current_patron_label;
+
 
 #[allow(deprecated)]
 use gtk::{
@@ -65,20 +68,19 @@ fn create_new_tab(window: &ApplicationWindow) {
         if response == ResponseType::Accept {
             let patron_name = entry.text().to_string();
             println!("Patron name: {}", patron_name);
-            // TODO
-            create_tab_with_patron(&patron_name);
+            let mut patrons = PATRONS.lock().unwrap();
+            patrons.push(Patron {
+                name: patron_name.to_string(),
+                tab: Vec::new(),
+            });
+            set_current_patron(&patron_name);
+            if let Some(label) = get_current_patron_label() {
+                label.set_text(&patron_name);
+            }
         }
         dialog.close();
     });
 
     // Show the dialog
     dialog.present();
-}
-
-fn create_tab_with_patron(patron_name: &str) {
-    let mut patrons = PATRONS.lock().unwrap();
-    patrons.push(Patron {
-        name: patron_name.to_string(),
-        tab: Vec::new(),
-    });
 }

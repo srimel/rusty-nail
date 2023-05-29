@@ -1,5 +1,9 @@
+use gtk::subclass::application_window;
 use gtk::{prelude::*, Box, Button, Label, ListBox, ListBoxRow, Orientation};
 use crate::patrons::PATRONS;
+use crate::current_patron::{get_current_patron};
+
+static mut CURRENT_PATRON_LABEL: Option<Label> = None;
 
 /// Builds the right panel of the application. This includes the list of items and the total
 /// amount owed with a checkout button.
@@ -47,6 +51,8 @@ fn build_amount_owed_box() -> Box {
         println!("Checkout button clicked");
         let patrons = PATRONS.lock().unwrap();
         println!("Patrons: {:?}", *patrons);
+        let curr_patrons = get_current_patron();
+        println!("Current patron: {:?}", curr_patrons);
     });
 
     total_amount_box
@@ -55,10 +61,23 @@ fn build_amount_owed_box() -> Box {
 fn build_tab_owner_box() -> Box {
     let tab_owner_box = Box::new(Orientation::Vertical, 0);
     let patron_name_label = Label::new(Some("Patron Name:"));
-    let current_patron_label = Label::new(Some("John Doe"));
+
+    let current_patron_label = Label::new(Some(""));
+    current_patron_label.set_widget_name("current-patron-label");
+    unsafe {
+        CURRENT_PATRON_LABEL = Some(current_patron_label.clone());  
+    }
+
     tab_owner_box.append(&patron_name_label);
     tab_owner_box.append(&current_patron_label);
     tab_owner_box.add_css_class("tab-owner-box");
 
     tab_owner_box
+}
+
+pub fn get_current_patron_label() -> &'static Option<Label> {
+    // Unsafe block to access the global mutable reference
+    unsafe {
+        &CURRENT_PATRON_LABEL
+    }
 }

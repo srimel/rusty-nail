@@ -2,6 +2,7 @@ mod data_processing;
 mod ui;
 mod patron;
 mod patrons;
+mod current_patron;
 
 use std::collections::HashMap;
 use std::env;
