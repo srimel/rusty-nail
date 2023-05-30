@@ -1,4 +1,3 @@
-
 #[derive(Clone, Debug)]
 pub struct Patron {
     pub name: String,

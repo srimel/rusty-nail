@@ -1,6 +1,6 @@
-use gtk::{prelude::*, Box, Button, Label, ListBox, ListBoxRow, Orientation};
+use crate::current_patron::get_current_patron;
 use crate::patrons::PATRONS;
-use crate::current_patron::{get_current_patron};
+use gtk::{prelude::*, Box, Button, Label, ListBox, ListBoxRow, Orientation};
 
 static mut CURRENT_PATRON_LABEL: Option<Label> = None;
 
@@ -71,7 +71,7 @@ fn build_tab_owner_box() -> Box {
     let current_patron_label = Label::new(Some(""));
     current_patron_label.set_widget_name("current-patron-label");
     unsafe {
-        CURRENT_PATRON_LABEL = Some(current_patron_label.clone());  
+        CURRENT_PATRON_LABEL = Some(current_patron_label.clone());
     }
 
     tab_owner_box.append(&patron_name_label);
@@ -83,14 +83,10 @@ fn build_tab_owner_box() -> Box {
 
 pub fn get_current_patron_label() -> &'static Option<Label> {
     // Unsafe block to access the global mutable reference
-    unsafe {
-        &CURRENT_PATRON_LABEL
-    }
+    unsafe { &CURRENT_PATRON_LABEL }
 }
 
 pub fn get_item_list() -> &'static Option<ListBox> {
     // Unsafe block to access the global mutable reference
-    unsafe {
-        &ITEM_LIST
-    }
-}   
+    unsafe { &ITEM_LIST }
+}

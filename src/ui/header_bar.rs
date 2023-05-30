@@ -1,8 +1,7 @@
+use crate::current_patron::set_current_patron;
 use crate::patron::Patron;
 use crate::patrons::PATRONS;
-use crate::current_patron::{set_current_patron};
 use crate::ui::transaction_panel::get_current_patron_label;
-
 
 #[allow(deprecated)]
 use gtk::{

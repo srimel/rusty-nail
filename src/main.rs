@@ -1,8 +1,8 @@
+mod current_patron;
 mod data_processing;
-mod ui;
 mod patron;
 mod patrons;
-mod current_patron;
+mod ui;
 
 use std::collections::HashMap;
 use std::env;
