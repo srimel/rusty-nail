@@ -1,0 +1,82 @@
+.items-list {
+    padding-top: 10px;
+    margin-bottom: 20px;
+    border: 2px solid black;
+}
+    
+.transaction-box {
+    margin-right: 5px;
+}
+
+.tab-owner-box {
+    margin-bottom: 5px;
+    background: white;
+    padding: 5px; 
+    border: 2px solid black;
+}
+
+.header-bar {
+    margin-bottom: 10px;
+}
+
+.btn-red {
+    background: lightcoral;
+}
+
+.btn-blue {
+    background: lightblue;
+}
+
+.btn-yellow {
+    background: yellow;
+}
+
+.btn-green {
+    background: lightgreen;
+}
+
+.btn-cyan {
+    background: cyan;
+}
+
+.btn-pink {
+    background: pink;
+}
+
+.btn-magenta {
+    background: magenta;
+}
+
+.btn-marine {
+    background: mediumaquamarine;
+}
+
+.btn-purple {
+    background: plum;
+}
+
+.btn-blueviolet {
+    background: lightyellow;
+}
+
+.main-window {
+    background: gray;
+}
+
+.btn {
+    /* Find best contrast color matching */
+    color: black;
+    font-weight: bold;
+    border-width: 2px;
+    border-color: black;
+}
+
+.checkout-btn {
+    margin-top: 20px;
+}
+
+.total-amount-box {
+    font-size: large;
+    font-weight: bold;
+    color: black;
+}
