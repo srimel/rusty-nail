@@ -1,6 +1,6 @@
 # Rusty Nail POS System
 
-### Created by Brittany Zamudio, Stuart Rimel
+### Created by Stuart Rimel
 
 A POS application that is made for the use in bars or nightclubs. Features would 
 include tracking sales, generating reports, and making transactions. Sales can be 
