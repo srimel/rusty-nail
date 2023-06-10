@@ -19,11 +19,11 @@ Gin,Hendrick's Gin,9.50
 Gin,Bombay Sapphire Gin,8.50
 Gin,Beefeater London Dry Gin,7.00
 Gin,Plymouth Gin,9.00
-Scotch,Johnnie Walker Black Label Scotch,10.00
-Scotch,Glenlivet 12-Year-Old Single Malt Scotch,12.50
-Scotch,Laphroaig 10-Year-Old Single Malt Scotch,13.00
-Scotch,Ardbeg 10-Year-Old Single Malt Scotch,11.50
-Scotch,Bowmore 12-Year-Old Single Malt Scotch,10.50
+Scotch,Johnnie Walker Black Label,10.00
+Scotch,Glenlivet 12-Year-Old Single Malt,12.50
+Scotch,Laphroaig 10-Year-Old Single Malt,13.00
+Scotch,Ardbeg 10-Year-Old Single Malt,11.50
+Scotch,Bowmore 12-Year-Old Single Malt,10.50
 Rum,Bacardi Superior White Rum,6.50
 Rum,Captain Morgan Original Spiced Rum,7.00
 Rum,Mount Gay Eclipse Rum,8.50
@@ -34,11 +34,11 @@ Wine,Pinot Noir (House),9.00
 Wine,Cabernet Sauvignon (House),8.50
 Wine,Sauvignon Blanc (House),7.50
 Wine,Merlot (House),8.00
-Beer,Domestic Lager (e.g., Budweiser),5.50
-Beer,Craft IPA (e.g., Sierra Nevada),6.50
-Beer,Stout (e.g., Guinness),7.00
-Beer,Wheat Beer (e.g., Blue Moon),6.00
-Beer,Pale Ale (e.g., Lagunitas),6.50
+Beer,Domestic Lager,5.50
+Beer,Craft IPA,6.50
+Beer,Stout,7.00
+Beer,Wheat Beer,6.00
+Beer,Pale Ale,6.50
 Food,Hotdog,3.50
 Food,Hamburger,6.50
 Food,Chips and Salsa,3.50
