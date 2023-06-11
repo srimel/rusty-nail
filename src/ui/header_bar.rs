@@ -44,6 +44,7 @@ pub fn build_header_bar(window: &ApplicationWindow) -> HeaderBar {
 fn create_new_tab(window: &ApplicationWindow) {
     // Create a new dialog box
     let dialog = Dialog::new();
+    dialog.add_css_class("dialog");
     dialog.set_title(Some("New Tab"));
     dialog.set_modal(true);
     dialog.set_transient_for(Some(window));
@@ -56,6 +57,7 @@ fn create_new_tab(window: &ApplicationWindow) {
 
     // Create a vertical box to hold the dialog's contents
     let content_area = dialog.content_area();
+    content_area.add_css_class("dialog-content-area");
     let vbox = Box::new(Orientation::Vertical, 10);
     content_area.append(&vbox);
 
@@ -93,6 +95,7 @@ fn create_new_tab(window: &ApplicationWindow) {
 fn create_select_patron(window: &ApplicationWindow) {
     // Create a new dialog box
     let dialog = Dialog::new();
+    dialog.add_css_class("dialog");
     dialog.set_title(Some("Select A Patron"));
     dialog.set_modal(true);
     dialog.set_transient_for(Some(window));
@@ -104,6 +107,7 @@ fn create_select_patron(window: &ApplicationWindow) {
         .add_css_class("btn");
 
     let content_area = dialog.content_area();
+    content_area.add_css_class("dialog-content-area");
     let patron_list_box = ListBox::new();
     patron_list_box.set_selection_mode(gtk::SelectionMode::Single);
     let patrons = PATRONS.lock().unwrap();
@@ -117,7 +121,6 @@ fn create_select_patron(window: &ApplicationWindow) {
     let cloned_patron_list_box = patron_list_box.clone();
     dialog.connect_response(move |dialog, response| {
         if response == ResponseType::Accept {
-            // TODO: get the selected row's patron label text
             let selected_patron = cloned_patron_list_box.selected_row().unwrap();
             let selected_patron_label = selected_patron.child().unwrap().downcast::<Label>().unwrap();
             let selected_patron_name = selected_patron_label.text().to_string();
