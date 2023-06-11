@@ -106,8 +106,15 @@ pub fn build_category_grid(data_map: HashMap<String, Vec<String>>) -> ScrolledWi
                                 println!("\tPrice: ${}", curr_item_price);
                                 // Add to current patron's tab
                                 let mut patrons = PATRONS.lock().unwrap();
-                                let curr_patron = patrons.iter_mut().find(|p| p.name == curr_pat).unwrap();
-                                curr_patron.tab.push((item.clone(), curr_item_price));
+                                let curr_patron = patrons.iter_mut().find(|p| p.name == curr_pat);
+                                match curr_patron {
+                                    Some(p) => {
+                                        p.tab.push((item.clone(), curr_item_price));
+                                    }
+                                    None => {
+                                        println!("Could not find patron");
+                                    }
+                                }
                             }
                         }
                     });
