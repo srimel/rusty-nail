@@ -1,4 +1,4 @@
-use crate::current_patron::get_current_patron;
+use crate::{current_patron::get_current_patron, patrons};
 use crate::patrons::PATRONS;
 use gtk::{prelude::*, Box, Button, Label, ListBox, ListBoxRow, Orientation, ApplicationWindow, Dialog, ResponseType};
 
@@ -103,7 +103,6 @@ fn build_amount_owed_box(window: &ApplicationWindow) -> Box {
     checkout_button.add_css_class("btn");
     checkout_button.add_css_class("checkout-btn");
 
-    // TODO: Add functionality to checkout button
     let cloned_window = window.clone();
     checkout_button.connect_clicked(move |_| {
         println!("Checkout button clicked");
@@ -168,20 +167,25 @@ fn start_checkout_dialog(window: &ApplicationWindow) {
         if response == ResponseType::Accept {
             let current_patron_name = get_current_patron_label_text();
             let mut patrons = PATRONS.lock().unwrap();
-            let curr_patron = patrons.iter_mut().find(|p| p.name == current_patron_name);
-            match curr_patron {
-                Some(p) => {
-                    p.tab.clear();
+            let posn = patrons.iter().position(|p| p.name == current_patron_name);
+            match posn {
+                Some(i) => {
+                    patrons.remove(i);
                 }
                 None => {
                     println!("Could not find patron");
                 }
             }
             drop(patrons);
-            update_item_list();
             if let Some(label) = get_current_patron_label() {
                 label.set_text("");
             }
+            if let Some(item_list) = get_item_list() {
+                item_list.unselect_all();
+                while let Some(row) = item_list.last_child() {
+                    item_list.remove(&row);
+                }
+            }   
         }
         dialog.close();
     });
