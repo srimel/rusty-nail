@@ -3,6 +3,16 @@
     margin-bottom: 20px;
     border: 2px solid black;
 }
+
+.dialog {
+    background: white;
+    padding: 5px;
+    border: 2px solid black;
+}
+
+.dialog-content-area {
+    margin-bottom: 5px;
+}
     
 .transaction-box {
     margin-right: 5px;

@@ -25,7 +25,7 @@ pub fn build_transaction_panel() -> Box {
 /// modules.
 fn build_item_list() -> ListBox {
     let item_list: ListBox = ListBox::new();
-    item_list.set_selection_mode(gtk::SelectionMode::None);
+    item_list.set_selection_mode(gtk::SelectionMode::Single);
     item_list.set_size_request(200, 300);
     item_list.add_css_class("items-list");
 
