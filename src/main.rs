@@ -13,6 +13,10 @@ use gtk::{
     CssProvider, Orientation,
 };
 
+/// Builds the UI for the application.
+/// Calls `build_header_bar()` to build the header bar.
+/// Calls `build_category_grid()` to build the category grid.
+/// Calls `build_transaction_panel()` to build the transaction panel.
 fn build_ui(application: &Application, data_map: HashMap<String, Vec<String>>) {
     let window = ApplicationWindow::new(application);
     window.set_cursor_from_name(Some("default"));
@@ -34,6 +38,7 @@ fn build_ui(application: &Application, data_map: HashMap<String, Vec<String>>) {
     window.present();
 }
 
+/// Creates a `CssProvider` and loads the CSS file.
 fn load_css() {
     let provider = CssProvider::new();
     provider.load_from_data(include_str!("style.css"));
@@ -44,6 +49,10 @@ fn load_css() {
     );
 }
 
+/// Main function for the application.
+/// Calls `build_ui()` to build the UI.
+/// Calls `read_csv_file()` to read the CSV file.
+/// Calls `load_css()` to load the CSS file via a `CssProvider`.
 fn main() {
     let application = Application::builder()
         .application_id("com.RustGroup.RustyNail")
