@@ -3,6 +3,10 @@ use std::error::Error;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
+/// Iterates over the CSV file and populates a HashMap.
+/// The first line of the CSV defines the keys for the HashMap.
+/// For each key in the HashMap, a Vec is created to store the values.
+/// The HashMap is returned.
 pub fn read_csv_file() -> Result<HashMap<String, Vec<String>>, Box<dyn Error>> {
     let file = File::open("./menus/menu1.csv")?;
     let reader = BufReader::new(file);
