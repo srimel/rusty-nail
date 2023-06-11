@@ -1,5 +1,5 @@
-use crate::{current_patron::get_current_patron, patrons};
 use crate::patrons::PATRONS;
+#[allow(deprecated)]
 use gtk::{prelude::*, Box, Button, Label, ListBox, ListBoxRow, Orientation, ApplicationWindow, Dialog, ResponseType};
 
 // These global mutable references are used to access and update widgets dynamically
@@ -120,6 +120,7 @@ fn build_amount_owed_box(window: &ApplicationWindow) -> Box {
     total_amount_box
 }
 
+/// Starts the dialog that prompts the user to enter their credit card information and generates a receipt if they press the checkout button.
 #[allow(deprecated)]
 fn start_checkout_dialog(window: &ApplicationWindow) {
     let dialog = Dialog::new();
@@ -205,6 +206,9 @@ fn start_checkout_dialog(window: &ApplicationWindow) {
     dialog.present();
 }
 
+/// Generates a mock receipt as an external text file.
+/// The receipt is stored in the receipts directory.
+/// The receipt file name is the number of receipts + 1.
 fn generate_receipt(patron_name: String, amount_owed: String, card_number: String, card_expiration: String, card_cvv: String) {
     use std::fs;
     use std::fs::File;
@@ -240,11 +244,13 @@ fn build_tab_owner_box() -> Box {
     tab_owner_box
 }
 
+/// Updates the current patron label with the name of the selected patron.
 pub fn get_current_patron_label() -> &'static Option<Label> {
     // Unsafe block to access the global mutable reference
     unsafe { &CURRENT_PATRON_LABEL }
 }
 
+/// Returns the text of the current patron label.
 pub fn get_current_patron_label_text() -> String {
     let current_patron_label = get_current_patron_label();
     let current_patron_label_text = current_patron_label.as_ref().unwrap().text();
@@ -285,12 +291,14 @@ pub fn update_item_list() {
     }
 }
 
+/// Returns the label that displays the total amount owed.
 fn get_amount_owed_label() -> &'static Option<Label> {
     // Unsafe block to access the global mutable reference
     unsafe { &AMOUNT_OWED_LABEL }
 }   
 
-pub fn get_item_list() -> &'static Option<ListBox> {
+/// Returns the list of items in the transaction panel.
+fn get_item_list() -> &'static Option<ListBox> {
     // Unsafe block to access the global mutable reference
     unsafe { &ITEM_LIST }
 }
