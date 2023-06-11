@@ -6,6 +6,8 @@ static mut CURRENT_PATRON_LABEL: Option<Label> = None;
 
 static mut ITEM_LIST: Option<ListBox> = None;
 
+static mut AMOUNT_OWED_LABEL: Option<Label> = None;
+
 /// Builds the right panel of the application. This includes the list of items and the total
 /// amount owed with a checkout button.
 pub fn build_transaction_panel() -> Box {
@@ -25,15 +27,6 @@ fn build_item_list() -> ListBox {
     item_list.set_size_request(200, 300);
     item_list.add_css_class("items-list");
 
-    // Placeholder items
-    // for i in 1..=5 {
-    //     let item_label = format!("Item {}: $5.00", i);
-    //     let row = ListBoxRow::new();
-    //     let label = Label::new(Some(&item_label));
-    //     row.set_child(Some(&label));
-    //     item_list.append(&row);
-    // }
-
     unsafe {
         ITEM_LIST = Some(item_list.clone());
     }
@@ -44,6 +37,10 @@ fn build_item_list() -> ListBox {
 fn build_amount_owed_box() -> Box {
     let total_amount_box = Box::new(Orientation::Vertical, 0);
     let total_amount_label = Label::new(Some("Total Amount: $25.00"));
+
+    unsafe {
+        AMOUNT_OWED_LABEL = Some(total_amount_label.clone());
+    }
 
     total_amount_box.append(&total_amount_label);
     total_amount_box.add_css_class("total-amount-box");
@@ -105,19 +102,29 @@ pub fn update_item_list() {
                 list_box.remove(&row);
             }
             // add all items in the patron's tab
+            let mut total = 0.0f64;
             for (item, price) in p.tab.iter() {
+                total += price;
                 let item_label = format!("{}: ${}", item, price);
                 let row = ListBoxRow::new();
                 let label = Label::new(Some(&item_label));
                 row.set_child(Some(&label));
                 item_list.as_ref().unwrap().append(&row);
             }
+            // update the AMOUNT_OWED_LABEL with total
+            let amount_owed_label = get_amount_owed_label();
+            amount_owed_label.as_ref().unwrap().set_text(&format!("Total Amount: ${}", total));
         }
         None => {
             println!("update_list_item: Could not find patron");
         }
     }
 }
+
+pub fn get_amount_owed_label() -> &'static Option<Label> {
+    // Unsafe block to access the global mutable reference
+    unsafe { &AMOUNT_OWED_LABEL }
+}   
 
 pub fn get_item_list() -> &'static Option<ListBox> {
     // Unsafe block to access the global mutable reference
