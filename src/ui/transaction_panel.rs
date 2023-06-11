@@ -200,6 +200,9 @@ fn start_checkout_dialog(window: &ApplicationWindow) {
                     item_list.remove(&row);
                 }
             }   
+            // Update the AMOUNT_OWED_LABEL with default value
+            let amount_owed_label = get_amount_owed_label();
+            amount_owed_label.as_ref().unwrap().set_text("Total Amount: $0.00");
         }
         dialog.close();
     });
