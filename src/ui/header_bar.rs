@@ -121,12 +121,14 @@ fn create_select_patron(window: &ApplicationWindow) {
     let cloned_patron_list_box = patron_list_box.clone();
     dialog.connect_response(move |dialog, response| {
         if response == ResponseType::Accept {
-            let selected_patron = cloned_patron_list_box.selected_row().unwrap();
-            let selected_patron_label = selected_patron.child().unwrap().downcast::<Label>().unwrap();
-            let selected_patron_name = selected_patron_label.text().to_string();
-            let current_patron_label = get_current_patron_label().as_ref().unwrap();
-            current_patron_label.set_text(&selected_patron_name);
-            update_item_list(); 
+            let selected_patron = cloned_patron_list_box.selected_row();
+            if let Some(selected_patron) = selected_patron {
+                let selected_patron_label = selected_patron.child().unwrap().downcast::<Label>().unwrap();
+                let selected_patron_name = selected_patron_label.text().to_string();
+                let current_patron_label = get_current_patron_label().as_ref().unwrap();
+                current_patron_label.set_text(&selected_patron_name);
+                update_item_list(); 
+            }
         }
         dialog.close();
     });
