@@ -1,6 +1,9 @@
-use crate::{current_patron::get_current_patron, patrons};
 use crate::patrons::PATRONS;
-use gtk::{prelude::*, Box, Button, Label, ListBox, ListBoxRow, Orientation, ApplicationWindow, Dialog, ResponseType};
+#[allow(deprecated)]
+use gtk::{
+    prelude::*, ApplicationWindow, Box, Button, Dialog, Label, ListBox, ListBoxRow, Orientation,
+    ResponseType,
+};
 
 // These global mutable references are used to access and update widgets dynamically
 // based on user interaction with the app.
@@ -15,7 +18,7 @@ pub fn build_transaction_panel(window: &ApplicationWindow) -> Box {
     transaction_box.append(&build_tab_owner_box());
     transaction_box.append(&build_item_list());
     transaction_box.append(&build_remove_item_box());
-    transaction_box.append(&build_amount_owed_box(&window));
+    transaction_box.append(&build_amount_owed_box(window));
     transaction_box.add_css_class("transaction-box");
 
     transaction_box
@@ -57,7 +60,10 @@ fn build_remove_item_box() -> Box {
             match curr_patron {
                 Some(p) => {
                     println!("Found Patron: {:?}", p);
-                    let item_index = p.tab.iter().position(|(item, _)| item == item_name_to_remove);
+                    let item_index = p
+                        .tab
+                        .iter()
+                        .position(|(item, _)| item == item_name_to_remove);
                     match item_index {
                         Some(i) => {
                             p.tab.remove(i);
@@ -71,7 +77,7 @@ fn build_remove_item_box() -> Box {
                     println!("Could not find patron");
                 }
             }
-            println!("Item to remove: {}", item_name_to_remove);   
+            println!("Item to remove: {}", item_name_to_remove);
             drop(patrons);
             update_item_list();
         } else {
@@ -110,16 +116,17 @@ fn build_amount_owed_box(window: &ApplicationWindow) -> Box {
         let total_amount_text = get_amount_owed_label().as_ref().unwrap().text();
         let split_string: Vec<&str> = total_amount_text.split(": $").collect();
         let amount = split_string[1].parse::<f64>().unwrap();
-        if get_current_patron_label_text() == "" || amount == 0.0 {
+        if get_current_patron_label_text().is_empty() || amount == 0.0 {
             println!("No patron selected or total amount is 0");
             return;
-        } 
+        }
         start_checkout_dialog(&cloned_window);
     });
 
     total_amount_box
 }
 
+/// Starts the dialog that prompts the user to enter their credit card information and generates a receipt if they press the checkout button.
 #[allow(deprecated)]
 fn start_checkout_dialog(window: &ApplicationWindow) {
     let dialog = Dialog::new();
@@ -139,7 +146,8 @@ fn start_checkout_dialog(window: &ApplicationWindow) {
     let vbox = Box::new(Orientation::Vertical, 0);
     content_area.append(&vbox);
 
-    let patron_name_label_text = String::from("Checkout Patron: ") + &get_current_patron_label_text();
+    let patron_name_label_text =
+        String::from("Checkout Patron: ") + &get_current_patron_label_text();
     let patron_name_label = Label::new(Some(&patron_name_label_text));
     patron_name_label.add_css_class("patron-name-label");
     vbox.append(&patron_name_label);
@@ -188,8 +196,14 @@ fn start_checkout_dialog(window: &ApplicationWindow) {
 
             // Generate a mock reciept as an external text file
             let amount = amount_owed_label_text.split(": $").collect::<Vec<&str>>()[1].to_string();
-            generate_receipt(current_patron_name, amount, card_number_entry.text().to_string(), card_expiration_entry.text().to_string(), card_cvv_entry.text().to_string());
-            
+            generate_receipt(
+                current_patron_name,
+                amount,
+                card_number_entry.text().to_string(),
+                card_expiration_entry.text().to_string(),
+                card_cvv_entry.text().to_string(),
+            );
+
             if let Some(label) = get_current_patron_label() {
                 label.set_text("");
             }
@@ -198,26 +212,47 @@ fn start_checkout_dialog(window: &ApplicationWindow) {
                 while let Some(row) = item_list.last_child() {
                     item_list.remove(&row);
                 }
-            }   
+            }
+            // Update the AMOUNT_OWED_LABEL with default value
+            let amount_owed_label = get_amount_owed_label();
+            amount_owed_label
+                .as_ref()
+                .unwrap()
+                .set_text("Total Amount: $0.00");
         }
         dialog.close();
     });
     dialog.present();
 }
 
-fn generate_receipt(patron_name: String, amount_owed: String, card_number: String, card_expiration: String, card_cvv: String) {
+/// Generates a mock receipt as an external text file.
+/// The receipt is stored in the receipts directory.
+/// The receipt file name is the number of receipts + 1.
+fn generate_receipt(
+    patron_name: String,
+    amount_owed: String,
+    card_number: String,
+    card_expiration: String,
+    card_cvv: String,
+) {
     use std::fs;
     use std::fs::File;
     use std::io::prelude::*;
 
     fs::create_dir_all("receipts").expect("Could not create receipts directory");
 
-    let receipt_count = fs::read_dir("receipts").expect("Could not read receipts directory").count();
+    let receipt_count = fs::read_dir("receipts")
+        .expect("Could not read receipts directory")
+        .count();
 
     let receipt_file_name = format!("receipts/receipt{}.txt", receipt_count + 1);
     let mut file = File::create(receipt_file_name).expect("Could not create file");
-    let receipt = format!("Name: {}\nAmount Charge: ${}\nCard Number: {}\nCard Expiration: {}\nCard CVV: {}", patron_name, amount_owed, card_number, card_expiration, card_cvv);
-    file.write_all(receipt.as_bytes()).expect("Could not write to file");
+    let receipt = format!(
+        "Name: {}\nAmount Charge: ${}\nCard Number: {}\nCard Expiration: {}\nCard CVV: {}",
+        patron_name, amount_owed, card_number, card_expiration, card_cvv
+    );
+    file.write_all(receipt.as_bytes())
+        .expect("Could not write to file");
 }
 
 /// Builds the box that displays the current patron's name.
@@ -240,11 +275,13 @@ fn build_tab_owner_box() -> Box {
     tab_owner_box
 }
 
+/// Updates the current patron label with the name of the selected patron.
 pub fn get_current_patron_label() -> &'static Option<Label> {
     // Unsafe block to access the global mutable reference
     unsafe { &CURRENT_PATRON_LABEL }
 }
 
+/// Returns the text of the current patron label.
 pub fn get_current_patron_label_text() -> String {
     let current_patron_label = get_current_patron_label();
     let current_patron_label_text = current_patron_label.as_ref().unwrap().text();
@@ -255,7 +292,9 @@ pub fn get_current_patron_label_text() -> String {
 /// This function is called when a new patron is selected or when a new tab is created.
 pub fn update_item_list() {
     let mut patrons = PATRONS.lock().unwrap();
-    let curr_patron = patrons.iter_mut().find(|p| p.name == get_current_patron_label_text());
+    let curr_patron = patrons
+        .iter_mut()
+        .find(|p| p.name == get_current_patron_label_text());
     match curr_patron {
         Some(p) => {
             let item_list = get_item_list();
@@ -277,7 +316,10 @@ pub fn update_item_list() {
             }
             // update the AMOUNT_OWED_LABEL with total
             let amount_owed_label = get_amount_owed_label();
-            amount_owed_label.as_ref().unwrap().set_text(&format!("Total Amount: ${:.2}", total));
+            amount_owed_label
+                .as_ref()
+                .unwrap()
+                .set_text(&format!("Total Amount: ${:.2}", total));
         }
         None => {
             println!("update_list_item: Could not find patron");
@@ -285,12 +327,14 @@ pub fn update_item_list() {
     }
 }
 
+/// Returns the label that displays the total amount owed.
 fn get_amount_owed_label() -> &'static Option<Label> {
     // Unsafe block to access the global mutable reference
     unsafe { &AMOUNT_OWED_LABEL }
-}   
+}
 
-pub fn get_item_list() -> &'static Option<ListBox> {
+/// Returns the list of items in the transaction panel.
+fn get_item_list() -> &'static Option<ListBox> {
     // Unsafe block to access the global mutable reference
     unsafe { &ITEM_LIST }
 }

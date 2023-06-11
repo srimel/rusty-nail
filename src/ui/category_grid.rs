@@ -1,9 +1,11 @@
-use std::collections::{HashMap, HashSet};
-use gtk::{prelude::*, Button, FlowBox, ScrolledWindow};
-use crate::ui::transaction_panel::{get_current_patron_label, get_current_patron_label_text, update_item_list};
-use crate::patron::Patron;
 use crate::patrons::PATRONS;
+use crate::ui::transaction_panel::{get_current_patron_label_text, update_item_list};
+use gtk::{prelude::*, Button, FlowBox, ScrolledWindow};
+use std::collections::{HashMap, HashSet};
 
+/// Builds a grid of buttons for each category.
+/// Each category button will have a callback function that will create a new grid of buttons for each item in the category.
+/// Buttons are colored by cycling through a list of CSS classes.
 pub fn build_category_grid(data_map: HashMap<String, Vec<String>>) -> ScrolledWindow {
     let scroll_window = ScrolledWindow::new();
     scroll_window.set_size_request(600, -1);
@@ -47,10 +49,9 @@ pub fn build_category_grid(data_map: HashMap<String, Vec<String>>) -> ScrolledWi
 
         let flowbox_clone_for_back_button = flowbox.clone();
 
-
         // Connect a callback function to handle button click event
         button.connect_clicked(move |_| {
-            // Here we will create a new FlowBox for the items
+            // Create a new FlowBox for the items
             let item_flowbox = FlowBox::new();
             item_flowbox.set_homogeneous(true);
             item_flowbox.set_valign(gtk::Align::Start);

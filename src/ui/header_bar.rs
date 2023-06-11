@@ -1,16 +1,16 @@
-use crate::current_patron::{set_current_patron, self}; // FIXME: remove current patron and just get from transaction panel globals
 use crate::patron::Patron;
 use crate::patrons::PATRONS;
 use crate::ui::transaction_panel::{get_current_patron_label, update_item_list};
 
-use gtk::{ListBox, ListBoxRow};
 #[allow(deprecated)]
 use gtk::{
-    prelude::*, ApplicationWindow, Box, Button, Dialog, Entry, HeaderBar, Label, Orientation,
-    ResponseType,
+    prelude::*, ApplicationWindow, Box, Button, Dialog, Entry, HeaderBar, Label, ListBox,
+    Orientation, ResponseType,
 };
 
 /// Builds the header bar at the top of the application.
+/// Connects the "Select Patron" button to `create_select_patron()`.
+/// Connects the "New Tab" button to `create_new_tab()`.
 pub fn build_header_bar(window: &ApplicationWindow) -> HeaderBar {
     let header_bar = HeaderBar::new();
     header_bar.add_css_class("header-bar");
@@ -18,28 +18,31 @@ pub fn build_header_bar(window: &ApplicationWindow) -> HeaderBar {
     let title_label = Label::new(Some("Rusty Nail POS"));
     header_bar.set_title_widget(Some(&title_label));
 
-    let header_button1 = Button::with_label("Select Patron");
-    header_button1.add_css_class("btn");
+    let select_patron_button = Button::with_label("Select Patron");
+    select_patron_button.add_css_class("btn");
     let another_cloned_window = window.clone();
-    header_button1.connect_clicked(move |_| {
+    select_patron_button.connect_clicked(move |_| {
         println!("Select patron button clicked");
         create_select_patron(&another_cloned_window);
     });
-    let header_button2 = Button::with_label("New Tab");
-    header_button2.add_css_class("btn");
+    let new_tab_button = Button::with_label("New Tab");
+    new_tab_button.add_css_class("btn");
     let cloned_window = window.clone();
-    header_button2.connect_clicked(move |_| {
+    new_tab_button.connect_clicked(move |_| {
         println!("New tab clicked");
         create_new_tab(&cloned_window);
     });
 
     // add buttons to header bar
-    header_bar.pack_start(&header_button1);
-    header_bar.pack_start(&header_button2);
+    header_bar.pack_start(&select_patron_button);
+    header_bar.pack_start(&new_tab_button);
 
     header_bar
 }
 
+/// Creates a dialog box that allows the user to create a new patron.
+/// The new patron is then set as the current patron.
+/// Calls `update_item_list()` to update the item list for the new patron, which in this case will be empty.
 #[allow(deprecated)]
 fn create_new_tab(window: &ApplicationWindow) {
     // Create a new dialog box
@@ -71,6 +74,9 @@ fn create_new_tab(window: &ApplicationWindow) {
     dialog.connect_response(move |dialog, response| {
         if response == ResponseType::Accept {
             let patron_name = entry.text().to_string();
+            if patron_name.is_empty() {
+                return;
+            }
             println!("Patron name: {}", patron_name);
             let mut patrons = PATRONS.lock().unwrap();
             patrons.push(Patron {
@@ -78,7 +84,6 @@ fn create_new_tab(window: &ApplicationWindow) {
                 tab: Vec::new(),
             });
             drop(patrons);
-            // set_current_patron(&patron_name);
             if let Some(label) = get_current_patron_label() {
                 label.set_text(&patron_name);
                 update_item_list();
@@ -91,6 +96,9 @@ fn create_new_tab(window: &ApplicationWindow) {
     dialog.present();
 }
 
+/// Creates a dialog box that allows the user to select a patron.
+/// The selected patron is then set as the current patron.
+/// Calls `update_item_list()` to update the item list for the selected patron.
 #[allow(deprecated)]
 fn create_select_patron(window: &ApplicationWindow) {
     // Create a new dialog box
@@ -118,16 +126,19 @@ fn create_select_patron(window: &ApplicationWindow) {
     content_area.append(&patron_list_box);
 
     // Connect the dialog's response signal
-    let cloned_patron_list_box = patron_list_box.clone();
     dialog.connect_response(move |dialog, response| {
         if response == ResponseType::Accept {
-            let selected_patron = cloned_patron_list_box.selected_row();
+            let selected_patron = patron_list_box.selected_row();
             if let Some(selected_patron) = selected_patron {
-                let selected_patron_label = selected_patron.child().unwrap().downcast::<Label>().unwrap();
+                let selected_patron_label = selected_patron
+                    .child()
+                    .unwrap()
+                    .downcast::<Label>()
+                    .unwrap();
                 let selected_patron_name = selected_patron_label.text().to_string();
                 let current_patron_label = get_current_patron_label().as_ref().unwrap();
                 current_patron_label.set_text(&selected_patron_name);
-                update_item_list(); 
+                update_item_list();
             }
         }
         dialog.close();
