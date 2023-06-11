@@ -248,8 +248,8 @@ fn generate_receipt(
     let receipt_file_name = format!("receipts/receipt{}.txt", receipt_count + 1);
     let mut file = File::create(receipt_file_name).expect("Could not create file");
     let receipt = format!(
-        "Name: {}\nAmount Charge: ${}\nCard Number: {}\nCard Expiration: {}\nCard CVV: {}",
-        patron_name, amount_owed, card_number, card_expiration, card_cvv
+        "Transaction ID: #{}\nName: {}\nAmount Charge: ${}\nCard Number: {}\nCard Expiration: {}\nCard CVV: {}",
+        receipt_count + 1, patron_name, amount_owed, card_number, card_expiration, card_cvv
     );
     file.write_all(receipt.as_bytes())
         .expect("Could not write to file");
