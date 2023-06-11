@@ -1,6 +1,8 @@
 use std::collections::{HashMap, HashSet};
-
 use gtk::{prelude::*, Button, FlowBox, ScrolledWindow};
+use crate::ui::transaction_panel::{get_current_patron_label, get_current_patron_label_text};
+use crate::patron::Patron;
+use crate::patrons::PATRONS;
 
 pub fn build_category_grid(data_map: HashMap<String, Vec<String>>) -> ScrolledWindow {
     let scroll_window = ScrolledWindow::new();
@@ -87,6 +89,28 @@ pub fn build_category_grid(data_map: HashMap<String, Vec<String>>) -> ScrolledWi
                     let item_css_class = item_css_class_iter.next().unwrap();
                     item_button.add_css_class(item_css_class);
                     item_button.add_css_class("btn");
+                    let cloned_item = item.clone();
+                    let cloned_data = cloned_data_map.clone();
+                    item_button.connect_clicked(move |_| {
+                        println!("{} button clicked", cloned_item);
+                        let _prices = cloned_data.get("Price").unwrap();
+                        let _items = cloned_data.get("Item").unwrap();
+                        // Iterate through the items to find item, price
+                        for (i, item) in _items.iter().enumerate() {
+                            if item == &cloned_item {
+                                let curr_pat = get_current_patron_label_text();
+                                let curr_item_price = _prices[i].parse::<f64>().unwrap();
+                                println!("Current Patron: {}", curr_pat);
+                                println!("Item to add:");
+                                println!("\tItem: {}", item);
+                                println!("\tPrice: ${}", curr_item_price);
+                                // Add to current patron's tab
+                                let mut patrons = PATRONS.lock().unwrap();
+                                let curr_patron = patrons.iter_mut().find(|p| p.name == curr_pat).unwrap();
+                                curr_patron.tab.push((item.clone(), curr_item_price));
+                            }
+                        }
+                    });
 
                     item_flowbox.append(&item_button);
                 }

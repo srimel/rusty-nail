@@ -86,6 +86,12 @@ pub fn get_current_patron_label() -> &'static Option<Label> {
     unsafe { &CURRENT_PATRON_LABEL }
 }
 
+pub fn get_current_patron_label_text() -> String {
+    let current_patron_label = get_current_patron_label();
+    let current_patron_label_text = current_patron_label.as_ref().unwrap().text();
+    current_patron_label_text.to_string()
+}
+
 pub fn get_item_list() -> &'static Option<ListBox> {
     // Unsafe block to access the global mutable reference
     unsafe { &ITEM_LIST }
