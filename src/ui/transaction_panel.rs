@@ -106,6 +106,14 @@ fn build_amount_owed_box(window: &ApplicationWindow) -> Box {
     let cloned_window = window.clone();
     checkout_button.connect_clicked(move |_| {
         println!("Checkout button clicked");
+        // if no patron is selected or total amount is 0, do nothing
+        let total_amount_text = get_amount_owed_label().as_ref().unwrap().text();
+        let split_string: Vec<&str> = total_amount_text.split(": $").collect();
+        let amount = split_string[1].parse::<f64>().unwrap();
+        if get_current_patron_label_text() == "" || amount == 0.0 {
+            println!("No patron selected or total amount is 0");
+            return;
+        } 
         start_checkout_dialog(&cloned_window);
     });
 
