@@ -212,7 +212,10 @@ fn generate_receipt(patron_name: String, amount_owed: String, card_number: Strin
 
     fs::create_dir_all("receipts").expect("Could not create receipts directory");
 
-    let mut file = File::create("receipts/receipt.txt").expect("Could not create file");
+    let receipt_count = fs::read_dir("receipts").expect("Could not read receipts directory").count();
+
+    let receipt_file_name = format!("receipts/receipt{}.txt", receipt_count + 1);
+    let mut file = File::create(receipt_file_name).expect("Could not create file");
     let receipt = format!("Name: {}\nAmount Charge: ${}\nCard Number: {}\nCard Expiration: {}\nCard CVV: {}", patron_name, amount_owed, card_number, card_expiration, card_cvv);
     file.write_all(receipt.as_bytes()).expect("Could not write to file");
 }
