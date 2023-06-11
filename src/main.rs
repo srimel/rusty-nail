@@ -27,7 +27,7 @@ fn build_ui(application: &Application, data_map: HashMap<String, Vec<String>>) {
     let main_box = Box::new(Orientation::Horizontal, 0);
     main_box.set_size_request(-1, 500);
     main_box.append(&ui::build_category_grid(data_map));
-    main_box.append(&ui::build_transaction_panel());
+    main_box.append(&ui::build_transaction_panel(&window));
 
     content_box.append(&main_box);
 
