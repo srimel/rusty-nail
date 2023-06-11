@@ -185,6 +185,11 @@ fn start_checkout_dialog(window: &ApplicationWindow) {
                 }
             }
             drop(patrons);
+
+            // Generate a mock reciept as an external text file
+            let cloned_amount_owed_label_text = amount_owed_label_text.clone();
+            generate_receipt(current_patron_name, cloned_amount_owed_label_text, card_number_entry.text().to_string(), card_expiration_entry.text().to_string(), card_cvv_entry.text().to_string());
+            
             if let Some(label) = get_current_patron_label() {
                 label.set_text("");
             }
@@ -198,6 +203,18 @@ fn start_checkout_dialog(window: &ApplicationWindow) {
         dialog.close();
     });
     dialog.present();
+}
+
+fn generate_receipt(patron_name: String, amount_owed: String, card_number: String, card_expiration: String, card_cvv: String) {
+    use std::fs;
+    use std::fs::File;
+    use std::io::prelude::*;
+
+    fs::create_dir_all("receipts").expect("Could not create receipts directory");
+
+    let mut file = File::create("receipts/receipt.txt").expect("Could not create file");
+    let receipt = format!("Patron Name: {}\nAmount Owed: {}\nCard Number: {}\nCard Expiration: {}\nCard CVV: {}", patron_name, amount_owed, card_number, card_expiration, card_cvv);
+    file.write_all(receipt.as_bytes()).expect("Could not write to file");
 }
 
 /// Builds the box that displays the current patron's name.
