@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 use gtk::{prelude::*, Button, FlowBox, ScrolledWindow};
-use crate::ui::transaction_panel::{get_current_patron_label, get_current_patron_label_text};
+use crate::ui::transaction_panel::{get_current_patron_label, get_current_patron_label_text, update_item_list};
 use crate::patron::Patron;
 use crate::patrons::PATRONS;
 
@@ -110,6 +110,9 @@ pub fn build_category_grid(data_map: HashMap<String, Vec<String>>) -> ScrolledWi
                                 match curr_patron {
                                     Some(p) => {
                                         p.tab.push((item.clone(), curr_item_price));
+                                        // release the lock for patrons
+                                        drop(patrons);
+                                        update_item_list();
                                     }
                                     None => {
                                         println!("Could not find patron");
