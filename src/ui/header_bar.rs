@@ -4,8 +4,8 @@ use crate::ui::transaction_panel::{get_current_patron_label, update_item_list};
 
 #[allow(deprecated)]
 use gtk::{
-    prelude::*, ApplicationWindow, Box, Button, Dialog, Entry, HeaderBar, Label, Orientation,
-    ResponseType, ListBox,
+    prelude::*, ApplicationWindow, Box, Button, Dialog, Entry, HeaderBar, Label, ListBox,
+    Orientation, ResponseType,
 };
 
 /// Builds the header bar at the top of the application.
@@ -130,11 +130,15 @@ fn create_select_patron(window: &ApplicationWindow) {
         if response == ResponseType::Accept {
             let selected_patron = patron_list_box.selected_row();
             if let Some(selected_patron) = selected_patron {
-                let selected_patron_label = selected_patron.child().unwrap().downcast::<Label>().unwrap();
+                let selected_patron_label = selected_patron
+                    .child()
+                    .unwrap()
+                    .downcast::<Label>()
+                    .unwrap();
                 let selected_patron_name = selected_patron_label.text().to_string();
                 let current_patron_label = get_current_patron_label().as_ref().unwrap();
                 current_patron_label.set_text(&selected_patron_name);
-                update_item_list(); 
+                update_item_list();
             }
         }
         dialog.close();

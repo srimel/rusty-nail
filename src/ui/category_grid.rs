@@ -1,7 +1,7 @@
-use std::collections::{HashMap, HashSet};
-use gtk::{prelude::*, Button, FlowBox, ScrolledWindow};
-use crate::ui::transaction_panel::{get_current_patron_label_text, update_item_list};
 use crate::patrons::PATRONS;
+use crate::ui::transaction_panel::{get_current_patron_label_text, update_item_list};
+use gtk::{prelude::*, Button, FlowBox, ScrolledWindow};
+use std::collections::{HashMap, HashSet};
 
 /// Builds a grid of buttons for each category.
 /// Each category button will have a callback function that will create a new grid of buttons for each item in the category.
@@ -48,7 +48,6 @@ pub fn build_category_grid(data_map: HashMap<String, Vec<String>>) -> ScrolledWi
         let scroll_window_clone = scroll_window.clone();
 
         let flowbox_clone_for_back_button = flowbox.clone();
-
 
         // Connect a callback function to handle button click event
         button.connect_clicked(move |_| {
