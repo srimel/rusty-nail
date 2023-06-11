@@ -92,7 +92,6 @@ pub fn get_current_patron_label_text() -> String {
     current_patron_label_text.to_string()
 }
 
-// TODO: find current patrons in PATRONS and populate the ITEM_LIST from their tab
 pub fn update_item_list() {
     let mut patrons = PATRONS.lock().unwrap();
     let curr_patron = patrons.iter_mut().find(|p| p.name == get_current_patron_label_text());
