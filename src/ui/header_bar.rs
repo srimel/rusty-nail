@@ -123,10 +123,9 @@ fn create_select_patron(window: &ApplicationWindow) {
     content_area.append(&patron_list_box);
 
     // Connect the dialog's response signal
-    let cloned_patron_list_box = patron_list_box.clone();
     dialog.connect_response(move |dialog, response| {
         if response == ResponseType::Accept {
-            let selected_patron = cloned_patron_list_box.selected_row();
+            let selected_patron = patron_list_box.selected_row();
             if let Some(selected_patron) = selected_patron {
                 let selected_patron_label = selected_patron.child().unwrap().downcast::<Label>().unwrap();
                 let selected_patron_name = selected_patron_label.text().to_string();

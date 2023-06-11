@@ -15,7 +15,7 @@ pub fn build_transaction_panel(window: &ApplicationWindow) -> Box {
     transaction_box.append(&build_tab_owner_box());
     transaction_box.append(&build_item_list());
     transaction_box.append(&build_remove_item_box());
-    transaction_box.append(&build_amount_owed_box(&window));
+    transaction_box.append(&build_amount_owed_box(window));
     transaction_box.add_css_class("transaction-box");
 
     transaction_box
@@ -110,7 +110,7 @@ fn build_amount_owed_box(window: &ApplicationWindow) -> Box {
         let total_amount_text = get_amount_owed_label().as_ref().unwrap().text();
         let split_string: Vec<&str> = total_amount_text.split(": $").collect();
         let amount = split_string[1].parse::<f64>().unwrap();
-        if get_current_patron_label_text() == "" || amount == 0.0 {
+        if get_current_patron_label_text().is_empty() || amount == 0.0 {
             println!("No patron selected or total amount is 0");
             return;
         } 
