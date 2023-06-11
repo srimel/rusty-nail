@@ -2,10 +2,10 @@ use crate::current_patron::get_current_patron;
 use crate::patrons::PATRONS;
 use gtk::{prelude::*, Box, Button, Label, ListBox, ListBoxRow, Orientation};
 
+// These global mutable references are used to access and update widgets dynamically
+// based on user interaction with the app.
 static mut CURRENT_PATRON_LABEL: Option<Label> = None;
-
 static mut ITEM_LIST: Option<ListBox> = None;
-
 static mut AMOUNT_OWED_LABEL: Option<Label> = None;
 
 /// Builds the right panel of the application. This includes the list of items and the total
@@ -20,7 +20,9 @@ pub fn build_transaction_panel() -> Box {
     transaction_box
 }
 
-// TODO: apply same pattern as CURRENT_PATRON_LABEL
+/// Builds the list of items that the patron has ordered.
+/// Assignes the `ListBox` to a global mutable reference so that it can be accessed from other
+/// modules.
 fn build_item_list() -> ListBox {
     let item_list: ListBox = ListBox::new();
     item_list.set_selection_mode(gtk::SelectionMode::None);
@@ -34,6 +36,9 @@ fn build_item_list() -> ListBox {
     item_list
 }
 
+/// Builds the box that displays the total amount owed and the checkout button.
+/// Assignes the `Label` to a global mutable reference so that it can be accessed from other
+/// modules.
 fn build_amount_owed_box() -> Box {
     let total_amount_box = Box::new(Orientation::Vertical, 0);
     let total_amount_label = Label::new(Some("Total Amount: $25.00"));
@@ -50,6 +55,7 @@ fn build_amount_owed_box() -> Box {
     checkout_button.add_css_class("btn");
     checkout_button.add_css_class("checkout-btn");
 
+    // TODO: Add functionality to checkout button
     checkout_button.connect_clicked(move |_| {
         println!("Checkout button clicked");
         let patrons = PATRONS.lock().unwrap();
@@ -61,6 +67,9 @@ fn build_amount_owed_box() -> Box {
     total_amount_box
 }
 
+/// Builds the box that displays the current patron's name.
+/// Assignes the `Label` to a global mutable reference so that it can be accessed from other
+/// modules.
 fn build_tab_owner_box() -> Box {
     let tab_owner_box = Box::new(Orientation::Vertical, 0);
     let patron_name_label = Label::new(Some("Patron Name:"));
@@ -89,6 +98,8 @@ pub fn get_current_patron_label_text() -> String {
     current_patron_label_text.to_string()
 }
 
+/// Updates the list of items in the transaction panel based on the current patron.
+/// This function is called when a new patron is selected or when a new tab is created.
 pub fn update_item_list() {
     let mut patrons = PATRONS.lock().unwrap();
     let curr_patron = patrons.iter_mut().find(|p| p.name == get_current_patron_label_text());
@@ -121,7 +132,7 @@ pub fn update_item_list() {
     }
 }
 
-pub fn get_amount_owed_label() -> &'static Option<Label> {
+fn get_amount_owed_label() -> &'static Option<Label> {
     // Unsafe block to access the global mutable reference
     unsafe { &AMOUNT_OWED_LABEL }
 }   
