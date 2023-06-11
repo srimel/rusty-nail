@@ -86,6 +86,39 @@ pub fn get_current_patron_label() -> &'static Option<Label> {
     unsafe { &CURRENT_PATRON_LABEL }
 }
 
+pub fn get_current_patron_label_text() -> String {
+    let current_patron_label = get_current_patron_label();
+    let current_patron_label_text = current_patron_label.as_ref().unwrap().text();
+    current_patron_label_text.to_string()
+}
+
+pub fn update_item_list() {
+    let mut patrons = PATRONS.lock().unwrap();
+    let curr_patron = patrons.iter_mut().find(|p| p.name == get_current_patron_label_text());
+    match curr_patron {
+        Some(p) => {
+            let item_list = get_item_list();
+            // delete all rows in the list
+            item_list.as_ref().unwrap().unselect_all();
+            let list_box = item_list.as_ref().unwrap();
+            while let Some(row) = list_box.last_child() {
+                list_box.remove(&row);
+            }
+            // add all items in the patron's tab
+            for (item, price) in p.tab.iter() {
+                let item_label = format!("{}: ${}", item, price);
+                let row = ListBoxRow::new();
+                let label = Label::new(Some(&item_label));
+                row.set_child(Some(&label));
+                item_list.as_ref().unwrap().append(&row);
+            }
+        }
+        None => {
+            println!("update_list_item: Could not find patron");
+        }
+    }
+}
+
 pub fn get_item_list() -> &'static Option<ListBox> {
     // Unsafe block to access the global mutable reference
     unsafe { &ITEM_LIST }

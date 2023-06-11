@@ -1,4 +1,4 @@
-use crate::current_patron::set_current_patron;
+use crate::current_patron::set_current_patron; // FIXME: remove current patron and just get from transaction panel globals
 use crate::patron::Patron;
 use crate::patrons::PATRONS;
 use crate::ui::transaction_panel::get_current_patron_label;
@@ -72,7 +72,8 @@ fn create_new_tab(window: &ApplicationWindow) {
                 name: patron_name.to_string(),
                 tab: Vec::new(),
             });
-            set_current_patron(&patron_name);
+            drop(patrons);
+            // set_current_patron(&patron_name);
             if let Some(label) = get_current_patron_label() {
                 label.set_text(&patron_name);
             }

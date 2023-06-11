@@ -44,7 +44,7 @@
 }
 
 .btn-magenta {
-    background: magenta;
+    background: rgb(254, 155, 254);
 }
 
 .btn-marine {
@@ -56,7 +56,7 @@
 }
 
 .btn-blueviolet {
-    background: lightyellow;
+    background: rgb(255, 213, 147);
 }
 
 .main-window {
