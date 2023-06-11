@@ -41,7 +41,7 @@ fn build_item_list() -> ListBox {
 /// modules.
 fn build_amount_owed_box() -> Box {
     let total_amount_box = Box::new(Orientation::Vertical, 0);
-    let total_amount_label = Label::new(Some("Total Amount: $25.00"));
+    let total_amount_label = Label::new(Some("Total Amount: $0.00"));
 
     unsafe {
         AMOUNT_OWED_LABEL = Some(total_amount_label.clone());
@@ -124,7 +124,7 @@ pub fn update_item_list() {
             }
             // update the AMOUNT_OWED_LABEL with total
             let amount_owed_label = get_amount_owed_label();
-            amount_owed_label.as_ref().unwrap().set_text(&format!("Total Amount: ${}", total));
+            amount_owed_label.as_ref().unwrap().set_text(&format!("Total Amount: ${:.2}", total));
         }
         None => {
             println!("update_list_item: Could not find patron");
