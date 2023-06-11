@@ -46,34 +46,37 @@ fn build_remove_item_box() -> Box {
     remove_item_button.connect_clicked(|_| {
         println!("Remove item button clicked");
         let item_list_box = get_item_list().as_ref().unwrap();
-        let selected_row = item_list_box.selected_row().unwrap();
-        let selected_row_label = selected_row.child().unwrap().downcast::<Label>().unwrap();
-        let selected_row_string = selected_row_label.text().to_string();
-        let split_string: Vec<&str> = selected_row_string.split(": $").collect();
-        let item_name_to_remove = split_string[0];
-        let current_patron_name = get_current_patron_label_text();
-        let mut patrons = PATRONS.lock().unwrap();
-        let curr_patron = patrons.iter_mut().find(|p| p.name == current_patron_name);
-        match curr_patron {
-            Some(p) => {
-                println!("Found Patron: {:?}", p);
-                let item_index = p.tab.iter().position(|(item, _)| item == item_name_to_remove);
-                match item_index {
-                    Some(i) => {
-                        p.tab.remove(i);
-                    }
-                    None => {
-                        println!("Item not found in patron's tab");
+        if let Some(selected_row) = item_list_box.selected_row() {
+            let selected_row_label = selected_row.child().unwrap().downcast::<Label>().unwrap();
+            let selected_row_string = selected_row_label.text().to_string();
+            let split_string: Vec<&str> = selected_row_string.split(": $").collect();
+            let item_name_to_remove = split_string[0];
+            let current_patron_name = get_current_patron_label_text();
+            let mut patrons = PATRONS.lock().unwrap();
+            let curr_patron = patrons.iter_mut().find(|p| p.name == current_patron_name);
+            match curr_patron {
+                Some(p) => {
+                    println!("Found Patron: {:?}", p);
+                    let item_index = p.tab.iter().position(|(item, _)| item == item_name_to_remove);
+                    match item_index {
+                        Some(i) => {
+                            p.tab.remove(i);
+                        }
+                        None => {
+                            println!("Item not found in patron's tab");
+                        }
                     }
                 }
+                None => {
+                    println!("Could not find patron");
+                }
             }
-            None => {
-                println!("Could not find patron");
-            }
+            println!("Item to remove: {}", item_name_to_remove);   
+            drop(patrons);
+            update_item_list();
+        } else {
+            println!("Could not find selected row");
         }
-        println!("Item to remove: {}", item_name_to_remove);   
-        drop(patrons);
-        update_item_list();
     });
     remove_item_box.append(&remove_item_button);
     remove_item_box.add_css_class("remove-item-box");
