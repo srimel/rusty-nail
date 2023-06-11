@@ -14,6 +14,7 @@ pub fn build_transaction_panel() -> Box {
     let transaction_box = Box::new(Orientation::Vertical, 0);
     transaction_box.append(&build_tab_owner_box());
     transaction_box.append(&build_item_list());
+    transaction_box.append(&build_remove_item_box());
     transaction_box.append(&build_amount_owed_box());
     transaction_box.add_css_class("transaction-box");
 
@@ -34,6 +35,50 @@ fn build_item_list() -> ListBox {
     }
 
     item_list
+}
+
+/// Builds the box that contains the remove item button.
+fn build_remove_item_box() -> Box {
+    let remove_item_box = Box::new(Orientation::Vertical, 0);
+    let remove_item_button = Button::with_label("Remove Item");
+    remove_item_button.add_css_class("btn");
+    remove_item_button.add_css_class("remove-item-btn");
+    remove_item_button.connect_clicked(|_| {
+        println!("Remove item button clicked");
+        let item_list_box = get_item_list().as_ref().unwrap();
+        let selected_row = item_list_box.selected_row().unwrap();
+        let selected_row_label = selected_row.child().unwrap().downcast::<Label>().unwrap();
+        let selected_row_string = selected_row_label.text().to_string();
+        let split_string: Vec<&str> = selected_row_string.split(": $").collect();
+        let item_name_to_remove = split_string[0];
+        let current_patron_name = get_current_patron_label_text();
+        let mut patrons = PATRONS.lock().unwrap();
+        let curr_patron = patrons.iter_mut().find(|p| p.name == current_patron_name);
+        match curr_patron {
+            Some(p) => {
+                println!("Found Patron: {:?}", p);
+                let item_index = p.tab.iter().position(|(item, _)| item == item_name_to_remove);
+                match item_index {
+                    Some(i) => {
+                        p.tab.remove(i);
+                    }
+                    None => {
+                        println!("Item not found in patron's tab");
+                    }
+                }
+            }
+            None => {
+                println!("Could not find patron");
+            }
+        }
+        println!("Item to remove: {}", item_name_to_remove);   
+        drop(patrons);
+        update_item_list();
+    });
+    remove_item_box.append(&remove_item_button);
+    remove_item_box.add_css_class("remove-item-box");
+
+    remove_item_box
 }
 
 /// Builds the box that displays the total amount owed and the checkout button.
