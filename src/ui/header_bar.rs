@@ -74,6 +74,9 @@ fn create_new_tab(window: &ApplicationWindow) {
     dialog.connect_response(move |dialog, response| {
         if response == ResponseType::Accept {
             let patron_name = entry.text().to_string();
+            if patron_name.is_empty() {
+                return;
+            }
             println!("Patron name: {}", patron_name);
             let mut patrons = PATRONS.lock().unwrap();
             patrons.push(Patron {
