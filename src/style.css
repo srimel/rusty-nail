@@ -1,6 +1,15 @@
+.remove-item-box {
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+.remove-item-btn {
+    background: red;
+}
+
 .items-list {
     padding-top: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border: 2px solid black;
 }
 
