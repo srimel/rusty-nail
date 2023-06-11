@@ -1,6 +1,6 @@
-use crate::current_patron::get_current_patron;
+use crate::{current_patron::get_current_patron, patrons};
 use crate::patrons::PATRONS;
-use gtk::{prelude::*, Box, Button, Label, ListBox, ListBoxRow, Orientation};
+use gtk::{prelude::*, Box, Button, Label, ListBox, ListBoxRow, Orientation, ApplicationWindow, Dialog, ResponseType};
 
 // These global mutable references are used to access and update widgets dynamically
 // based on user interaction with the app.
@@ -10,12 +10,12 @@ static mut AMOUNT_OWED_LABEL: Option<Label> = None;
 
 /// Builds the right panel of the application. This includes the list of items and the total
 /// amount owed with a checkout button.
-pub fn build_transaction_panel() -> Box {
+pub fn build_transaction_panel(window: &ApplicationWindow) -> Box {
     let transaction_box = Box::new(Orientation::Vertical, 0);
     transaction_box.append(&build_tab_owner_box());
     transaction_box.append(&build_item_list());
     transaction_box.append(&build_remove_item_box());
-    transaction_box.append(&build_amount_owed_box());
+    transaction_box.append(&build_amount_owed_box(&window));
     transaction_box.add_css_class("transaction-box");
 
     transaction_box
@@ -87,7 +87,7 @@ fn build_remove_item_box() -> Box {
 /// Builds the box that displays the total amount owed and the checkout button.
 /// Assignes the `Label` to a global mutable reference so that it can be accessed from other
 /// modules.
-fn build_amount_owed_box() -> Box {
+fn build_amount_owed_box(window: &ApplicationWindow) -> Box {
     let total_amount_box = Box::new(Orientation::Vertical, 0);
     let total_amount_label = Label::new(Some("Total Amount: $0.00"));
 
@@ -103,16 +103,121 @@ fn build_amount_owed_box() -> Box {
     checkout_button.add_css_class("btn");
     checkout_button.add_css_class("checkout-btn");
 
-    // TODO: Add functionality to checkout button
+    let cloned_window = window.clone();
     checkout_button.connect_clicked(move |_| {
         println!("Checkout button clicked");
-        let patrons = PATRONS.lock().unwrap();
-        println!("Patrons: {:?}", *patrons);
-        let curr_patrons = get_current_patron();
-        println!("Current patron: {:?}", curr_patrons);
+        // if no patron is selected or total amount is 0, do nothing
+        let total_amount_text = get_amount_owed_label().as_ref().unwrap().text();
+        let split_string: Vec<&str> = total_amount_text.split(": $").collect();
+        let amount = split_string[1].parse::<f64>().unwrap();
+        if get_current_patron_label_text() == "" || amount == 0.0 {
+            println!("No patron selected or total amount is 0");
+            return;
+        } 
+        start_checkout_dialog(&cloned_window);
     });
 
     total_amount_box
+}
+
+#[allow(deprecated)]
+fn start_checkout_dialog(window: &ApplicationWindow) {
+    let dialog = Dialog::new();
+    dialog.add_css_class("dialog");
+    dialog.set_title(Some("Checkout"));
+    dialog.set_modal(true);
+    dialog.set_transient_for(Some(window));
+    dialog
+        .add_button("Cancel", ResponseType::Cancel)
+        .add_css_class("btn");
+    dialog
+        .add_button("Checkout", ResponseType::Accept)
+        .add_css_class("btn");
+
+    let content_area = dialog.content_area();
+    content_area.add_css_class("dialog-content-area");
+    let vbox = Box::new(Orientation::Vertical, 0);
+    content_area.append(&vbox);
+
+    let patron_name_label_text = String::from("Checkout Patron: ") + &get_current_patron_label_text();
+    let patron_name_label = Label::new(Some(&patron_name_label_text));
+    patron_name_label.add_css_class("patron-name-label");
+    vbox.append(&patron_name_label);
+
+    let amount_owed_label = get_amount_owed_label().as_ref().unwrap();
+    let amount_owed_label_text = amount_owed_label.text().to_string();
+    let checkout_amount_label = Label::new(Some(&amount_owed_label_text));
+    checkout_amount_label.add_css_class("checkout-amount-label");
+    vbox.append(&checkout_amount_label);
+
+    let card_number_label = Label::new(Some("Card Number:"));
+    card_number_label.add_css_class("card-number-label");
+    vbox.append(&card_number_label);
+    let card_number_entry = gtk::Entry::new();
+    card_number_entry.add_css_class("card-number-entry");
+    vbox.append(&card_number_entry);
+
+    let card_expiration_label = Label::new(Some("Card Expiration:"));
+    card_expiration_label.add_css_class("card-expiration-label");
+    vbox.append(&card_expiration_label);
+    let card_expiration_entry = gtk::Entry::new();
+    card_expiration_entry.add_css_class("card-expiration-entry");
+    vbox.append(&card_expiration_entry);
+
+    let card_cvv_label = Label::new(Some("Card CVV:"));
+    card_cvv_label.add_css_class("card-cvv-label");
+    vbox.append(&card_cvv_label);
+    let card_cvv_entry = gtk::Entry::new();
+    card_cvv_entry.add_css_class("card-cvv-entry");
+    vbox.append(&card_cvv_entry);
+
+    dialog.connect_response(move |dialog, response| {
+        if response == ResponseType::Accept {
+            let current_patron_name = get_current_patron_label_text();
+            let mut patrons = PATRONS.lock().unwrap();
+            let posn = patrons.iter().position(|p| p.name == current_patron_name);
+            match posn {
+                Some(i) => {
+                    patrons.remove(i);
+                }
+                None => {
+                    println!("Could not find patron");
+                }
+            }
+            drop(patrons);
+
+            // Generate a mock reciept as an external text file
+            let amount = amount_owed_label_text.split(": $").collect::<Vec<&str>>()[1].to_string();
+            generate_receipt(current_patron_name, amount, card_number_entry.text().to_string(), card_expiration_entry.text().to_string(), card_cvv_entry.text().to_string());
+            
+            if let Some(label) = get_current_patron_label() {
+                label.set_text("");
+            }
+            if let Some(item_list) = get_item_list() {
+                item_list.unselect_all();
+                while let Some(row) = item_list.last_child() {
+                    item_list.remove(&row);
+                }
+            }   
+        }
+        dialog.close();
+    });
+    dialog.present();
+}
+
+fn generate_receipt(patron_name: String, amount_owed: String, card_number: String, card_expiration: String, card_cvv: String) {
+    use std::fs;
+    use std::fs::File;
+    use std::io::prelude::*;
+
+    fs::create_dir_all("receipts").expect("Could not create receipts directory");
+
+    let receipt_count = fs::read_dir("receipts").expect("Could not read receipts directory").count();
+
+    let receipt_file_name = format!("receipts/receipt{}.txt", receipt_count + 1);
+    let mut file = File::create(receipt_file_name).expect("Could not create file");
+    let receipt = format!("Name: {}\nAmount Charge: ${}\nCard Number: {}\nCard Expiration: {}\nCard CVV: {}", patron_name, amount_owed, card_number, card_expiration, card_cvv);
+    file.write_all(receipt.as_bytes()).expect("Could not write to file");
 }
 
 /// Builds the box that displays the current patron's name.
