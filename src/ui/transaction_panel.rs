@@ -5,10 +5,15 @@ use gtk::{
     ResponseType,
 };
 
-// These global mutable references are used to access and update widgets dynamically
-// based on user interaction with the app.
+/// The current patron label displays the name of the patron whose tab is currently being viewed.
+/// This label is updated when a new patron is selected or when a new tab is created.
 static mut CURRENT_PATRON_LABEL: Option<Label> = None;
+/// The item list displays the items that the patron has ordered.
+/// This list is updated when a new patron is selected or when a new item is added to the patron's tab.
 static mut ITEM_LIST: Option<ListBox> = None;
+/// The amount owed label displays the total amount owed by the patron.
+/// This includes the total price of all items in the patron's tab.
+/// This label is updated when a new patron is selected or when a new item is added to the patron's tab.
 static mut AMOUNT_OWED_LABEL: Option<Label> = None;
 
 /// Builds the right panel of the application. This includes the list of items and the total
