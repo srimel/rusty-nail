@@ -10,6 +10,19 @@ Rusty Nail is a GTK4 GUI application that serves as a point of sales (POS) syste
 
 <br>
 
+## How to Install and Run
+---
+### MacOS, Linux
+1. Install GTK4 using package manager ([homebrew](https://brew.sh/) for macOS)
+>> Ex. `brew install gtk4` for macOS or `sudo pacman -Syu gtk4` for Arch  
+>> Note: for linux use the appropriate package manager for your distro.
+2. From top level project directory run `cargo run`.
+### Windows
+1. Install GTK4 by following [this guide](https://www.gtk.org/docs/installations/windows) from gtk.org
+2. From top level project directory run `cargo run`.
+
+<br>
+
 ## Example Screenshots:
 ---
 Main Screen:
