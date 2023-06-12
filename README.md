@@ -9,7 +9,7 @@ Rusty Nail is a GTK4 GUI application that serves as a point of sales (POS) syste
 ---
 ## Example Screenshots:
 ---
-
+![main screen](https://gitlab.cecs.pdx.edu/rust-group-project/rusty_nail/-/blob/main/screenshots/checkout_patron.png)
 ---
 
 ## 
