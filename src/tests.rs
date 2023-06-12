@@ -2,12 +2,12 @@
 mod tests {
     use crate::ui;
 
+    use crate::data_processing::read_csv_file;
     use std::fs;
-    use std::path::Path;
-    use ui::generate_receipt;
     use std::fs::write;
     use std::io::ErrorKind;
-    use crate::data_processing::read_csv_file;
+    use std::path::Path;
+    use ui::generate_receipt;
 
     /// Test case generates a mock receipt and check whether the feceipt file is created and its
     /// constents match the expected output.
@@ -44,7 +44,7 @@ mod tests {
         assert_eq!(contents, expected_receipt);
     }
 
-        #[test]
+    #[test]
     fn test_read_csv_file() {
         // Arrange
         let test_file_content = "col1,col2,col3\nval1,val2,val3\n";
@@ -73,7 +73,7 @@ mod tests {
         let result = read_csv_file("./menus/non_existent.csv");
 
         // Assert
-           match result {
+        match result {
             Ok(_) => panic!("Should have failed because the file doesn't exist."),
             Err(e) => {
                 let io_error = e.downcast::<std::io::Error>().unwrap();

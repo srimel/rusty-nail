@@ -29,10 +29,7 @@ pub fn read_csv_file(file_path: &str) -> Result<HashMap<String, Vec<String>>, Bo
     }
 
     // Read the remaining lines (data)
-    for line in BufReader::new(File::open(file_path)?)
-        .lines()
-        .skip(1)
-    {
+    for line in BufReader::new(File::open(file_path)?).lines().skip(1) {
         let data_line = line?;
         let values: Vec<&str> = data_line.split(',').collect();
 
