@@ -9,7 +9,24 @@ Rusty Nail is a GTK4 GUI application that serves as a point of sales (POS) syste
 ---
 ## Example Screenshots:
 ---
-![main screen](https://gitlab.cecs.pdx.edu/rust-group-project/rusty_nail/-/raw/main/screenshots/checkout_patron.png)
+Main Screen:
+![main screen](https://gitlab.cecs.pdx.edu/rust-group-project/rusty_nail/-/raw/main/screenshots/main_screen.png)
+
+Create New Tab:
+![new patron](https://gitlab.cecs.pdx.edu/rust-group-project/rusty_nail/-/raw/main/screenshots/new_patron.png)
+
+Patron Order:
+![patron order](https://gitlab.cecs.pdx.edu/rust-group-project/rusty_nail/-/raw/main/screenshots/patron_order.png)
+
+Select Patron:
+![select patron](https://gitlab.cecs.pdx.edu/rust-group-project/rusty_nail/-/raw/main/screenshots/select_patron.png)
+
+Checkout Patron:
+![checkout patron](https://gitlab.cecs.pdx.edu/rust-group-project/rusty_nail/-/raw/main/screenshots/checkout_patron.png)
+
+Mock Receipt as text file:
+![mock receipt](https://gitlab.cecs.pdx.edu/rust-group-project/rusty_nail/-/raw/main/screenshots/receipt.png)
+
 ---
 
 ## 
