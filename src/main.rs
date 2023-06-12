@@ -1,8 +1,8 @@
 mod data_processing;
 mod patron;
 mod patrons;
-mod ui;
 mod tests;
+mod ui;
 
 use std::collections::HashMap;
 use std::env;

@@ -6,7 +6,7 @@ mod tests {
     use std::path::Path;
     use ui::generate_receipt;
 
-    /// Test case generates a mock receipt and check whether the feceipt file is created and its 
+    /// Test case generates a mock receipt and check whether the feceipt file is created and its
     /// constents match the expected output.
     #[test]
     fn test_generate_receipt() {
@@ -31,8 +31,8 @@ mod tests {
         let receipt_file_name = format!("receipts/receipt{}.txt", receipt_count);
         assert!(Path::new(&receipt_file_name).exists());
 
-        let contents = fs::read_to_string(receipt_file_name)
-            .expect("Something went wrong reading the file");
+        let contents =
+            fs::read_to_string(receipt_file_name).expect("Something went wrong reading the file");
 
         let expected_receipt = format!(
             "Transaction ID: #{}\nName: {}\nAmount Charge: ${}\nCard Number: {}\nCard Expiration: {}\nCard CVV: {}",
