@@ -64,7 +64,7 @@ fn main() {
     application.connect_activate(|app| {
         let current_dir = env::current_dir().expect("Failed to get current directory");
         println!("Current working directory: {:?}", current_dir);
-        match read_csv_file() {
+        match read_csv_file("./menus/menu1.csv") {
             Ok(data_map) => {
                 println!("{:?}", data_map);
                 build_ui(app, data_map);

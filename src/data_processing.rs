@@ -7,8 +7,8 @@ use std::io::{BufRead, BufReader};
 /// The first line of the CSV defines the keys for the HashMap.
 /// For each key in the HashMap, a Vec is created to store the values.
 /// The HashMap is returned.
-pub fn read_csv_file() -> Result<HashMap<String, Vec<String>>, Box<dyn Error>> {
-    let file = File::open("./menus/menu1.csv")?;
+pub fn read_csv_file(file_path: &str) -> Result<HashMap<String, Vec<String>>, Box<dyn Error>> {
+    let file = File::open(file_path)?;
     let reader = BufReader::new(file);
 
     // Read the first line (header)
@@ -29,7 +29,7 @@ pub fn read_csv_file() -> Result<HashMap<String, Vec<String>>, Box<dyn Error>> {
     }
 
     // Read the remaining lines (data)
-    for line in BufReader::new(File::open("./menus/menu1.csv")?)
+    for line in BufReader::new(File::open(file_path)?)
         .lines()
         .skip(1)
     {
