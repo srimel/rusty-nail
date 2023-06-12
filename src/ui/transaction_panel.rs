@@ -233,7 +233,7 @@ fn start_checkout_dialog(window: &ApplicationWindow) {
 /// Generates a mock receipt as an external text file.
 /// The receipt is stored in the receipts directory.
 /// The receipt file name is the number of receipts + 1.
-fn generate_receipt(
+pub fn generate_receipt(
     patron_name: String,
     amount_owed: String,
     card_number: String,
