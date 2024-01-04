@@ -37,7 +37,7 @@ within a hopitality setting.
 <br>
 
 ## Example Screenshots:
----
+
 Main Screen:
 
 ![main screen](https://github.com/srimel/rusty-nail/blob/main/screenshots/main_screen.png)
