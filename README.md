@@ -51,8 +51,3 @@ Mock Receipt as text file:
 
 <br>
 
-## What Worked, What Did Not
----
-
-This project was challenging as I'm new to rust and also new to GTK development. I really struggled with sending property changed signals the proper way, so ended up using unsafe and unidomatic methods to track application state with global mutables. For example, I had to use a vector of patrons wrapped in a mutex to keep track accross the different widgets that need that information. Another issue, is I would of liked a looser coupling between the UI and the underlying logic. Ideally, I would of designed this application using the MVC design pattern, but I ran out of time to refactor and might revisit that at another time. Also, since this appliation was very UI heavy I found it challenging creating unit testing for the components. Since the underlying logic is too tightly coupled to the UI components, I couldn't really design great unit testing for this project.
-
