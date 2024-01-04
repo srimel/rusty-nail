@@ -27,8 +27,8 @@ within a hopitality setting.
 
 ### MacOS, Linux
 1. Install GTK4 using package manager ([homebrew](https://brew.sh/) for macOS)
->> Ex. `brew install gtk4` for macOS or `sudo pacman -Syu gtk4` for Arch  
->> Note: for linux use the appropriate package manager for your distro.
+> Ex. `brew install gtk4` for macOS or `sudo pacman -Syu gtk4` for Arch  
+> Note: for linux use the appropriate package manager for your distro.
 2. From top level project directory run `cargo run`.
 ### Windows
 1. Install GTK4 by following [this guide](https://www.gtk.org/docs/installations/windows) from gtk.org
