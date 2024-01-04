@@ -1,17 +1,30 @@
 # Rusty Nail POS System
 
-### Created by Stuart Rimel
+### Created by Stuart Rimel, 2023
 
 <br>
 
 ## Overview
----
-Rusty Nail is a GTK4 GUI application that serves as a point of sales (POS) system specifically for operating in bars and restaurants. This application will provide a visual interface for the user to take orders for patrons and add to their tab. This program will also allow users to remove items from a patron's tab as well as create and select among many patrons in the system. When a patrons is "closing out" their tab, the checkout button will generate a mock receipt containing the transaction id, name, total, and credit card details for payment processing. The GUI will dynamically update itself based on user interactions with the program. The main visual component is a grid of buttons system such that on clicking will generate another grid of buttons to select specific items to add to the current patron's tab. Different modal dialogs will present to the user when they create a new tab, select a different patron, and close out the currently selected patron. 
+Rusty Nail is a GTK4 GUI application created for Intro to Rust class final project. This application mocks a point of sales system experience catering
+to the needs of bars and restaurants. This application provides users with a visually intuitive interface for managing orders, tabs, and transactions
+within a hopitality setting. 
+
+<br>
+
+## Features
+- **Order Management:** GUI implemented with GTK4 provides easy-to-use interface allowing users to take orders from patrons.
+- **Dynamic Updates:** The GUI dynamically updates in real-time based on user interactions, ensuring a seamless and responsive experience.
+- **Tab Creation:** Users can create new tabs for patrons, facilitating efficient organization of orders and transactions.
+- **Patron Selection:** The application allows users to create and select among multiple patrons in the system to modify their tabs.
+- **Creating Menu:** Users can easily add a menu or modify their current one by modifying the menu csv file in the menu directory.
+- **Grid-Based System:** The main visual component is a grid of buttons for users to dynamically navigate their menus and select items to add to a tab.
+- **Checkout Process:** When a patron is ready to close their tab, the checkout button generates a mock receipt containing essential details such as transaction ID, patron name, total amount, and credit card details for seamless payment processing.
+
 
 <br>
 
 ## How to Install and Run
----
+
 ### MacOS, Linux
 1. Install GTK4 using package manager ([homebrew](https://brew.sh/) for macOS)
 >> Ex. `brew install gtk4` for macOS or `sudo pacman -Syu gtk4` for Arch  
